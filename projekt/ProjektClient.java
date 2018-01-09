@@ -78,6 +78,21 @@ public class ProjektClient {
 		return bazaOdp;
 	}
 	
+	
+	public int pobierzUID(){
+		BufferedReader fromclient;
+		try {
+			fromclient = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+			String str;		
+			str = fromclient.readLine();
+			UID = Integer.parseInt(str);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return UID;
+	}
+	
 	public void zamknijPo³¹czenie(){
 		try{
 		PrintWriter out = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()));	
@@ -90,26 +105,6 @@ public class ProjektClient {
 		}
 	}
 	
-	
-	public static void main(String args[]) {
-		
-			ProjektClient klient = new ProjektClient();
-			klient.zamknijPo³¹czenie();
-		
-		
-//			PrintWriter out = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()));
-//			Scanner sc = new Scanner(System.in);
-//			String str;
-//			socket.setTcpNoDelay(true);
-//			while(sc.hasNext()){
-//				str = sc.nextLine();
-//				out.println(str);
-//				out.flush();
-//				if(str.equals("exit")) break;
-//				}
-//			}
-//			sc.close();
-//			socket.close();
-		
-	}
+			
+
 }

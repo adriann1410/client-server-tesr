@@ -1,16 +1,10 @@
 package projekt;
 
-import java.awt.EventQueue;
+
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.net.Socket;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -37,6 +31,13 @@ public class ProjektTestWindow extends JFrame{
 		JPanel odppanel1 = new JPanel(new GridLayout(1,4));
 		
 		pyt1 = klient.pobierzDane();
+		int UID = klient.pobierzUID();
+		
+		JPanel info = new JPanel(new GridLayout());
+		JLabel idlabel = new JLabel("Odpowiedz na pytania. \n Twoje ID to: " + UID ,JLabel.CENTER );
+		info.add(idlabel);
+		add(info);
+		
 		
 // Pytanie 1		
 		JLabel pyta0 = new JLabel("1. " +(String)pyt1[0].pytanie ,JLabel.CENTER );
@@ -171,16 +172,8 @@ public class ProjektTestWindow extends JFrame{
 					}
 				}
 				
-				
-				
-				
-
-				
-//				JPanel odppanel= new JPanel(new GridLayout());
-//				JLabel wyniki = new JLabel("Uzyskany wynik: " + odp + "/4" ,JLabel.CENTER );
-//				odppanel.add(wyniki);
-//				add(odppanel);				
-//				klient.zamknijPo³¹czenie();
+							
+				klient.zamknijPo³¹czenie();
 				JOptionPane.showMessageDialog(null,"Uzyskany wynik: " + wynik + "/4 \n"
 						+ "Poprawne odpowiedzi to:\n"
 						+ "Pytanie 1: " + poprawneodp.charAt(0) + "\n"
@@ -189,8 +182,9 @@ public class ProjektTestWindow extends JFrame{
 						+ "Pytanie 4: " + poprawneodp.charAt(3));  
 				}
 				});
-			
-		setLayout(new GridLayout(9,0));
+		
+		
+		setLayout(new GridLayout(10,0));
 		
 		
 		

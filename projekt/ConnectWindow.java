@@ -3,8 +3,6 @@ import java.awt.EventQueue;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.net.Socket;
-
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -28,16 +26,12 @@ public class ConnectWindow extends JFrame{
 		connect.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
 				
-				
 				EventQueue.invokeLater(new Runnable() {
 				    @Override
 				    public void run() {
 				         new ProjektTestWindow();
 				         }
 				    });
-					
-					
-				
 					
 				}
 				});
@@ -46,15 +40,5 @@ public class ConnectWindow extends JFrame{
 		add(connect);
 	}
 	
-	
-	
-	public static void main(String args[]) {
-		EventQueue.invokeLater(new Runnable() {
-		    @Override
-		    public void run() {
-		         new ConnectWindow();
-		         }
-		    });
-	}
 	
 }

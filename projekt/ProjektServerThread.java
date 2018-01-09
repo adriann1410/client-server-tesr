@@ -1,12 +1,13 @@
 package projekt;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.ObjectOutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.sql.Connection;
+import java.sql.Statement;
 
 public class ProjektServerThread extends Thread {
 	Socket Socket;
@@ -19,38 +20,22 @@ public class ProjektServerThread extends Thread {
 	public void run() 
 	{
 		
-		String pytania[] = new String[4];
-		pytania[0] = "a srasz?";
-		pytania[1] = "ma pan dowód?";
-		pytania[2] = "co tam gówniaki?";
-		pytania[3] = "wiertara";
+		Database bazaDanych = new Database();
+		bazaDanych.checkDriver("com.mysql.jdbc.Driver");
+		Connection con = bazaDanych.getConnection("jdbc:mysql://", "localhost", 3306, "root", "");
+		Statement st = bazaDanych.createStatement(con);
+		bazaDanych.executeUpdate(st, "USE projektBaza;");
 		
-		String[] odpowiedzi1 = new String[4];
-		odpowiedzi1[0] = "tak";
-		odpowiedzi1[1] = "nie";
-		odpowiedzi1[2] = "nie wiem";
-		odpowiedzi1[3] = "co";
 		
-		String[] odpowiedzi2 = new String[4];
-		odpowiedzi2[0] = "tak";
-		odpowiedzi2[1] = "nie";
-		odpowiedzi2[2] = "nie wiem";
-		odpowiedzi2[3] = "co";
 		
-		String[] odpowiedzi3 = new String[4];
-		odpowiedzi3[0] = "tak";
-		odpowiedzi3[1] = "nie";
-		odpowiedzi3[2] = "nie wiem";
-		odpowiedzi3[3] = "co";
 		
-		String[] odpowiedzi4 = new String[4];
-		odpowiedzi4[0] = "tak";
-		odpowiedzi4[1] = "nie";
-		odpowiedzi4[2] = "nie wiem";
-		odpowiedzi4[3] = "co";
-		
-		String poprawneodp = "2222";
-		
+		String[] pytania = bazaDanych.getPytania(bazaDanych.executeQuery(st, "select pytanie from pytania;"));
+		String[] odpowiedzi1	= bazaDanych.getOdpowiedzi(bazaDanych.executeQuery(st, "SELECT odp1, odp2, odp3, odp4 FROM `odpowiedzi` WHERE id_pytania =" + 1 +";"));
+		String[] odpowiedzi2	= bazaDanych.getOdpowiedzi(bazaDanych.executeQuery(st, "SELECT odp1, odp2, odp3, odp4 FROM `odpowiedzi` WHERE id_pytania =" + 2 +";"));
+		String[] odpowiedzi3	= bazaDanych.getOdpowiedzi(bazaDanych.executeQuery(st, "SELECT odp1, odp2, odp3, odp4 FROM `odpowiedzi` WHERE id_pytania =" + 3 +";"));
+		String[] odpowiedzi4	= bazaDanych.getOdpowiedzi(bazaDanych.executeQuery(st, "SELECT odp1, odp2, odp3, odp4 FROM `odpowiedzi` WHERE id_pytania =" + 4 +";"));
+		String poprawneodp = bazaDanych.getKlucz(bazaDanych.executeQuery(st, "select poprawna_odp from klucz;"));
+		int id = bazaDanych.getNewId(st);
 		
 		Pytanie pyt1 = new Pytanie(pytania[0], odpowiedzi1);
 		Pytanie pyt2 = new Pytanie(pytania[1], odpowiedzi2);
@@ -65,24 +50,31 @@ public class ProjektServerThread extends Thread {
 			ObjectOutputStream out2 = new ObjectOutputStream(Socket.getOutputStream());				
 				out2.writeObject(listapyt);
 				
+			//wysylanie id uzytkownika	
+			PrintWriter sendid = new PrintWriter(new OutputStreamWriter(Socket.getOutputStream()));	
+			sendid.println(String.valueOf(id));
+			sendid.flush();	
+						
+				
 			//pobieranie odpowiedzi klienta					
 			BufferedReader fromclient = new BufferedReader(new InputStreamReader(Socket.getInputStream()));
 			String str;		
 			str = fromclient.readLine();
 			odpklienta = str;
+			
+			bazaDanych.executeUpdate(st, "INSERT INTO uzytkownicy VALUES(" + id + "," + odpklienta.charAt(0) + "," + odpklienta.charAt(1)
+			+"," + odpklienta.charAt(2)+"," + odpklienta.charAt(3) + ");");
+			
 			//wysylanie bazy poprawnych odpowiedzi	
 			PrintWriter baza = new PrintWriter(new OutputStreamWriter(Socket.getOutputStream()));	
 			baza.println(String.valueOf(poprawneodp));
 			baza.flush();	
 				
 				
-			
-			
-															
-								
-				if(str.equals("exit")){
-					System.out.println("klient zamknal polaczenie");
-				}
+																									
+			if(str.equals("exit")){
+				System.out.println("klient"+ id +"zamknal polaczenie");
+			}
 				
 										
 			Socket.close();
