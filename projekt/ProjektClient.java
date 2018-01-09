@@ -1,8 +1,12 @@
 package projekt;
 
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.net.Socket;
 
 public class ProjektClient {
@@ -10,6 +14,8 @@ public class ProjektClient {
 	private int port = 8000;
 	Socket socket;
 	Pytanie pytania[];
+	String odp;
+	String bazaOdp;
 	int UID;
 	
 	public ProjektClient(){
@@ -42,10 +48,41 @@ public class ProjektClient {
 		
 	}
 
+	public Socket pobierszSocket(){
+		return socket;
+	}
 	
+	public void przeslijOdp(String odp){
+		try{
+			PrintWriter out = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()));	
+				out.println(odp);
+				out.flush();
+			}catch(IOException e) {
+			 // TODO Auto-generated catch block
+				System.err.println(e);
+			}
+	}
+	
+	
+	public String pobierzBazeOdp(){
+		BufferedReader fromclient;
+		try {
+			fromclient = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+			String str;		
+			str = fromclient.readLine();
+			bazaOdp = str;
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return bazaOdp;
+	}
 	
 	public void zamknijPo³¹czenie(){
-		try{				
+		try{
+		PrintWriter out = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()));	
+			out.println("exit");
+			out.flush();
 		socket.close();
 		}catch(IOException e) {
 		 // TODO Auto-generated catch block
