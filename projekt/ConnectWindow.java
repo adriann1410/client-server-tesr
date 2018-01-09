@@ -30,7 +30,7 @@ public class ConnectWindow extends JFrame{
 			public void actionPerformed(ActionEvent event) {
 				//uruchamianie testu z pobranymi pytaniami
 				ProjektClient klient = new ProjektClient();
-				final Pytanie pyt1 = klient.pobierzDane();
+				final Pytanie[] pyt1 = klient.pobierzDane();
 
 				EventQueue.invokeLater(new Runnable() {
 				    @Override

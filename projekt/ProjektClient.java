@@ -9,7 +9,7 @@ public class ProjektClient {
 	
 	private int port = 8000;
 	Socket socket;
-	Pytanie pyt1;
+	Pytanie pytania[];
 	int UID;
 	
 	public ProjektClient(){
@@ -24,12 +24,12 @@ public class ProjektClient {
 		}
 	
 	
-	public Pytanie pobierzDane(){
+	public Pytanie[] pobierzDane(){
 		
 		try {
 
 			ObjectInputStream in = new ObjectInputStream(socket.getInputStream());						
-			pyt1 = (Pytanie)in.readObject();
+			pytania = (Pytanie[])in.readObject();
 			
 			} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -38,7 +38,7 @@ public class ProjektClient {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		return pyt1;
+		return pytania;
 		
 	}
 
