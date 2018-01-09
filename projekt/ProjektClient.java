@@ -1,19 +1,15 @@
 package projekt;
 
-import java.io.BufferedReader;
+
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.net.InetAddress;
 import java.net.Socket;
 
 public class ProjektClient {
 	
 	private int port = 8000;
 	Socket socket;
-	String pytania[] = new String[4];
+	Pytanie pyt1;
 	int UID;
 	
 	public ProjektClient(){
@@ -28,29 +24,28 @@ public class ProjektClient {
 		}
 	
 	
-	public String[] pobierzPytania(){
+	public Pytanie pobierzDane(){
 		
-		BufferedReader in;
-		String str;
-		
-			try {
-				in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-				int i = 0;
-				while ((str = in.readLine()) != null) {
-				pytania[i] = str;
-				//System.out.println(socket.getInetAddress() + " : " + str);
-				i++;
-				}
+		try {
+
+			ObjectInputStream in = new ObjectInputStream(socket.getInputStream());						
+			pyt1 = (Pytanie)in.readObject();
+			
 			} catch (IOException e) {
+			// TODO Auto-generated catch block
+			System.err.println(e);
+			} catch (ClassNotFoundException e) {
 				// TODO Auto-generated catch block
-				System.err.println(e);
+				e.printStackTrace();
 			}
-			return pytania;
+		return pyt1;
+		
 	}
+
 	
 	
 	public void zamknijPo³¹czenie(){
-		try{
+		try{				
 		socket.close();
 		}catch(IOException e) {
 		 // TODO Auto-generated catch block
@@ -62,7 +57,6 @@ public class ProjektClient {
 	public static void main(String args[]) {
 		
 			ProjektClient klient = new ProjektClient();
-			klient.pobierzPytania();
 			klient.zamknijPo³¹czenie();
 		
 		

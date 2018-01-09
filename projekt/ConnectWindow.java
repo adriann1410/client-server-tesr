@@ -29,13 +29,13 @@ public class ConnectWindow extends JFrame{
 		connect.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
 				//uruchamianie testu z pobranymi pytaniami
-				
 				ProjektClient klient = new ProjektClient();
-				final String pytania[] = klient.pobierzPytania();
+				final Pytanie pyt1 = klient.pobierzDane();
+
 				EventQueue.invokeLater(new Runnable() {
 				    @Override
 				    public void run() {
-				         new ProjektTestWindow(pytania);
+				         new ProjektTestWindow(pyt1);
 				         }
 				    });
 					
