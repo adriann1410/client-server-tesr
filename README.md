@@ -2,5 +2,4 @@
 
 
 Prosta aplikacja klient- server.
-Pobiera Liste pytan z serwera
-Przesyla odpowiedzi na serwer
+Serwer pobiera pytania z bazy danych i przesyła do klienta.
